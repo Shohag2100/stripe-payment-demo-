@@ -1,0 +1,15 @@
+asgiref==3.11.1
+certifi==2026.2.25
+charset-normalizer==3.4.7
+Django==6.0.4
+djangorestframework==3.17.1
+idna==3.11
+psycopg2-binary==2.9.12
+PyJWT==2.12.1
+python-dotenv==1.2.2
+requests==2.33.1
+sqlparse==0.5.5
+stripe==15.0.1
+typing_extensions==4.15.0
+urllib3==2.6.3
+Pillow==10.1.0
