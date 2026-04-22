@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'payments',
     'accounts',
+    'gold',
     'rest_framework',
 ]
 
@@ -147,4 +148,7 @@ JWT_EXPIRATION_HOURS = 1
 # Media files (user uploads)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Gold API key (optional). Set GOLD_API_KEY in your .env if you have one.
+GOLD_API_KEY = os.environ.get('GOLD_API_KEY')
 

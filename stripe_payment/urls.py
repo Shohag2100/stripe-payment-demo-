@@ -9,6 +9,7 @@ urlpatterns = [
     path('', payment_views.welcome, name='welcome'),
     path('payment/', include(('payments.urls', 'payments'), namespace='payments')),
     path('accounts/', include('accounts.urls')),
+    path('gold/', include('gold.urls')),
 ]
 
 if settings.DEBUG:
