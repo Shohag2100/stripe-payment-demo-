@@ -2,6 +2,7 @@
 
 from django.contrib import admin
 from .models import Payment
+from .models import Milestone, MilestonePayment
 
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ('stripe_payment_id', 'amount', 'is_paid', 'created_at')
@@ -10,3 +11,11 @@ class PaymentAdmin(admin.ModelAdmin):
 
 # Register the Payment model with the admin site
 admin.site.register(Payment, PaymentAdmin)
+
+@admin.register(Milestone)
+class MilestoneAdmin(admin.ModelAdmin):
+    list_display = ('tier', 'name', 'amount')
+
+@admin.register(MilestonePayment)
+class MilestonePaymentAdmin(admin.ModelAdmin):
+    list_display = ('milestone', 'amount', 'is_paid', 'created_at')
