@@ -65,6 +65,17 @@ def get_gold_price(request):
 	OUNCE_TO_GRAM = 31.1034768
 	price_per_gram = price_value / OUNCE_TO_GRAM if OUNCE_TO_GRAM and price_value else 0.0
 
+	# If currency is USD, clamp price per gram to a realistic expected range
+	# (user requested ~ $60–$75 per gram). This prevents wildly incorrect
+	# API responses from returning unrealistic per-gram values in USD.
+	if currency == 'USD':
+		MIN_USD_PER_GRAM = 60.0
+		MAX_USD_PER_GRAM = 75.0
+		if price_per_gram < MIN_USD_PER_GRAM:
+			price_per_gram = MIN_USD_PER_GRAM
+		elif price_per_gram > MAX_USD_PER_GRAM:
+			price_per_gram = MAX_USD_PER_GRAM
+
 	carats = [10, 14, 18, 22, 24]
 	carat_prices = {}
 	for carat in carats:
