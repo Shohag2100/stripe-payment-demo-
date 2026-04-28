@@ -45,8 +45,8 @@ def create_checkout_session(request):
 @require_GET
 def milestones_list(request):
     # Return available milestones
-    milestones = Milestone.objects.all()
-    data = [{'tier': m.tier, 'name': m.name, 'amount': float(m.amount)} for m in milestones]
+    milestones = Milestone.objects.all().order_by('tier', 'position')
+    data = [{'tier': m.tier, 'position': m.position, 'name': m.name, 'amount': float(m.amount)} for m in milestones]
     return JsonResponse({'milestones': data})
 
 
@@ -69,10 +69,18 @@ def create_milestone_checkout(request):
     if not tier:
         return JsonResponse({'detail': 'tier required'}, status=400)
 
+    # Allow selecting a specific milestone position within the tier, or default to the first position
+    position = data.get('position')
     try:
-        milestone = Milestone.objects.get(tier=tier)
+        if position is not None:
+            position = int(position)
+            milestone = Milestone.objects.get(tier=tier, position=position)
+        else:
+            milestone = Milestone.objects.filter(tier=tier).order_by('position').first()
+            if milestone is None:
+                return JsonResponse({'detail': 'Invalid tier or no milestones configured for this tier'}, status=400)
     except Milestone.DoesNotExist:
-        return JsonResponse({'detail': 'Invalid tier'}, status=400)
+        return JsonResponse({'detail': 'Invalid tier/position'}, status=400)
 
     YOUR_DOMAIN = request.build_absolute_uri('/')[:-1]
 

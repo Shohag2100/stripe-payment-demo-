@@ -80,10 +80,18 @@ def get_gold_price(request):
 	carat_prices = {}
 	for carat in carats:
 		carat_price = (carat / 24) * price_per_gram
-		carat_prices[f"{carat}k"] = round(carat_price, 2)
+		carat_prices[f"{carat}k"] = round(carat_price, 1)
 
-	return JsonResponse({
-		'price': round(price_per_gram, 2),
-		'currency': currency,
-		'gold_prices': carat_prices,
-	})
+	# Compute additional units and return the requested JSON structure
+	# Vori (Bangladeshi unit): 1 vori = 11.6638038 grams
+	VORI_TO_GRAM = 11.6638038
+	vori_price = price_per_gram * VORI_TO_GRAM
+
+	response = {
+		'ounce_usd': round(price_value, 2),
+		'gram_usd': round(price_per_gram, 1),
+		'vori_usd': round(vori_price, 1),
+		'carat_per_gram': carat_prices,
+	}
+
+	return JsonResponse(response)

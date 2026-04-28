@@ -14,7 +14,7 @@ admin.site.register(Payment, PaymentAdmin)
 
 @admin.register(Milestone)
 class MilestoneAdmin(admin.ModelAdmin):
-    list_display = ('tier', 'name', 'amount')
+    list_display = ('tier', 'position', 'name', 'amount')
 
 @admin.register(MilestonePayment)
 class MilestonePaymentAdmin(admin.ModelAdmin):

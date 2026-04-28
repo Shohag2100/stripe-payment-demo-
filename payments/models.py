@@ -16,12 +16,19 @@ class Milestone(models.Model):
         ('standard', 'Standard'),
         ('premium', 'Premium'),
     ]
-    tier = models.CharField(max_length=20, choices=TIER_CHOICES, unique=True)
+    tier = models.CharField(max_length=20, choices=TIER_CHOICES)
+    # position indicates milestone number within a tier (1,2,3)
+    position = models.IntegerField(default=1)
     name = models.CharField(max_length=100)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f"{self.name} ({self.tier}) - ${self.amount}"
+        return f"{self.name} ({self.tier} #{self.position}) - ${self.amount}"
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['tier', 'position'], name='unique_tier_position')
+        ]
 
 
 class MilestonePayment(models.Model):
