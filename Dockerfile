@@ -17,11 +17,20 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
+# Copy only requirements first to leverage Docker layer caching
 COPY requirements.txt /app/
+# If you need to access private package indexes during build, use BuildKit secrets:
+# Example (requires BuildKit):
+#   DOCKER_BUILDKIT=1 docker build --secret id=pip_conf,src=$HOME/.config/pip/pip.conf .
+# Then in Dockerfile use a secret mount for the RUN that installs packages:
+#   RUN --mount=type=secret,id=pip_conf,target=/root/.config/pip/pip.conf \
+#       pip install --no-cache-dir --upgrade pip && \
+#       pip install --no-cache-dir -r requirements.txt
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the project code into the container
+# Sensitive files (env/, .env, .venv, etc.) are excluded by .dockerignore
 COPY . /app/
 
 # --- FIX: COPY AND CONFIGURE ENTRYPOINT SCRIPT ---

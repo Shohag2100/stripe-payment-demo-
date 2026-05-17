@@ -1,0 +1,12 @@
+env/
+env/*
+venv/
+.venv/
+.env
+*.pyc
+__pycache__/
+.git/
+media/
+*.sqlite3
+node_modules/
+*.log
